@@ -1,0 +1,298 @@
+[
+  {
+    "image": "data/coco-smoke/images/000000022935.jpg",
+    "image_size": [
+      640,
+      480
+    ],
+    "model": "Qwen/Qwen2.5-VL-3B-Instruct",
+    "prompt_version": "structured-v2",
+    "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+    "config": {
+      "match_iou": 0.3,
+      "min_score": 0.4,
+      "box_policy": "preserve"
+    },
+    "raw": "{\"objects\":[{\"label\":\"person\",\"kind\":\"object\",\"bbox\":[17,18,361,360],\"text\":null}]}",
+    "parse_error": null,
+    "baseline": {
+      "objects": [
+        {
+          "label": "person",
+          "bbox": [
+            21.587301587301585,
+            23.736263736263737,
+            458.4126984126984,
+            474.72527472527474
+          ],
+          "kind": "object",
+          "text": null
+        }
+      ]
+    },
+    "verified": {
+      "objects": [
+        {
+          "label": "person",
+          "bbox": [
+            21.587301587301585,
+            23.736263736263737,
+            458.4126984126984,
+            474.72527472527474
+          ],
+          "kind": "object",
+          "text": null
+        }
+      ]
+    },
+    "audit": [
+      {
+        "proposal": {
+          "label": "person",
+          "bbox": [
+            21.587301587301585,
+            23.736263736263737,
+            458.4126984126984,
+            474.72527472527474
+          ],
+          "kind": "object",
+          "text": null
+        },
+        "cv": {
+          "contrast_std": 54.48042680118359,
+          "edge_fraction": 0.07699418111286216
+        },
+        "status": "supported",
+        "source": "detector",
+        "match_iou": 0.9812265768993861,
+        "evidence_score": 0.7977538108825684,
+        "evidence_bbox": [
+          19.238525390625,
+          24.076202392578125,
+          459.624267578125,
+          479.2971496582031
+        ],
+        "box_policy": "preserve",
+        "bbox_changed": false
+      }
+    ],
+    "image_sha256": "90fad7bfc9fab88492d9722ea1aa14ee77514d8c10dbda86086bd37d8a05acf0",
+    "ground_truth": {
+      "objects": [
+        {
+          "label": "sports ball",
+          "bbox": [
+            49.3,
+            194.88,
+            188.26999999999998,
+            334.32
+          ],
+          "kind": "object",
+          "text": null
+        },
+        {
+          "label": "person",
+          "bbox": [
+            20.4,
+            18.36,
+            457.45,
+            473.66
+          ],
+          "kind": "object",
+          "text": null
+        },
+        {
+          "label": "person",
+          "bbox": [
+            422.83,
+            25.89,
+            634.25,
+            474.61
+          ],
+          "kind": "object",
+          "text": null
+        }
+      ]
+    },
+    "original_pipeline_seconds": 61.208,
+    "reverification_seconds": 0.0032,
+    "evidence": {
+      "detector": [
+        {
+          "region": {
+            "label": "person",
+            "bbox": [
+              424.3475341796875,
+              27.59521484375,
+              630.0179443359375,
+              479.18621826171875
+            ],
+            "kind": "object",
+            "text": null
+          },
+          "score": 0.9317238330841064
+        },
+        {
+          "region": {
+            "label": "person",
+            "bbox": [
+              152.37554931640625,
+              22.197998046875,
+              459.2054443359375,
+              479.0146484375
+            ],
+            "kind": "object",
+            "text": null
+          },
+          "score": 0.9082822799682617
+        },
+        {
+          "region": {
+            "label": "sports ball",
+            "bbox": [
+              49.04107666015625,
+              195.02369689941406,
+              189.10494995117188,
+              332.5594482421875
+            ],
+            "kind": "object",
+            "text": null
+          },
+          "score": 0.8924980759620667
+        },
+        {
+          "region": {
+            "label": "person",
+            "bbox": [
+              19.238525390625,
+              24.076202392578125,
+              459.624267578125,
+              479.2971496582031
+            ],
+            "kind": "object",
+            "text": null
+          },
+          "score": 0.7977538108825684
+        }
+      ],
+      "ocr": []
+    },
+    "evidence_origin": "recomputed"
+  },
+  {
+    "image": "data/coco-smoke/images/000000286507.jpg",
+    "image_size": [
+      640,
+      434
+    ],
+    "model": "Qwen/Qwen2.5-VL-3B-Instruct",
+    "prompt_version": "structured-v2",
+    "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+    "config": {
+      "match_iou": 0.3,
+      "min_score": 0.4,
+      "box_policy": "preserve"
+    },
+    "raw": "{\"objects\":[{\"label\":\"train\",\"kind\":\"object\",\"bbox\":[92,127,498,247],\"text\":null}]}",
+    "parse_error": null,
+    "baseline": {
+      "objects": [
+        {
+          "label": "train",
+          "bbox": [
+            110.6766917293233,
+            151.42307692307693,
+            599.0977443609022,
+            294.5
+          ],
+          "kind": "object",
+          "text": null
+        }
+      ]
+    },
+    "verified": {
+      "objects": [
+        {
+          "label": "train",
+          "bbox": [
+            110.6766917293233,
+            151.42307692307693,
+            599.0977443609022,
+            294.5
+          ],
+          "kind": "object",
+          "text": null
+        }
+      ]
+    },
+    "audit": [
+      {
+        "proposal": {
+          "label": "train",
+          "bbox": [
+            110.6766917293233,
+            151.42307692307693,
+            599.0977443609022,
+            294.5
+          ],
+          "kind": "object",
+          "text": null
+        },
+        "cv": {
+          "contrast_std": 72.0994076471702,
+          "edge_fraction": 0.2213577097505669
+        },
+        "status": "supported",
+        "source": "detector",
+        "match_iou": 0.9275454164048808,
+        "evidence_score": 0.8600276112556458,
+        "evidence_bbox": [
+          110.25537109375,
+          149.65756225585938,
+          577.7144775390625,
+          297.2269592285156
+        ],
+        "box_policy": "preserve",
+        "bbox_changed": false
+      }
+    ],
+    "image_sha256": "f54826e1ad2b012ceb6b36d15bf083aaebfc31090785ae2bf42106788d8f4c3c",
+    "ground_truth": {
+      "objects": [
+        {
+          "label": "train",
+          "bbox": [
+            114.11,
+            153.12,
+            601.75,
+            292.58000000000004
+          ],
+          "kind": "object",
+          "text": null
+        }
+      ]
+    },
+    "original_pipeline_seconds": 47.825,
+    "reverification_seconds": 0.0027,
+    "evidence": {
+      "detector": [
+        {
+          "region": {
+            "label": "train",
+            "bbox": [
+              110.25537109375,
+              149.65756225585938,
+              577.7144775390625,
+              297.2269592285156
+            ],
+            "kind": "object",
+            "text": null
+          },
+          "score": 0.8600276112556458
+        }
+      ],
+      "ocr": []
+    },
+    "evidence_origin": "recomputed"
+  }
+]

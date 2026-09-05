@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.cache/
+.env
+*.pt
+*.safetensors
+data/*
+!data/.gitkeep
+outputs/
+examples/demo_output/
+
+.DS_Store
+.env.*
+!.env.example
+*.log

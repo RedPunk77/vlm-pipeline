@@ -1,0 +1,6 @@
+{
+  "objects": [
+    {"label": "cat", "kind": "object", "bbox": [50, 40, 200, 180], "text": null},
+    {"label": "text", "kind": "text", "bbox": [10, 10, 90, 30], "text": "OPEN"}
+  ]
+}
