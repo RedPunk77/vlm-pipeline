@@ -59,11 +59,14 @@ def main():
         child.add_argument("--detector", default="yolo11n.pt")
         child.add_argument("--languages", nargs="+", default=["en", "ru"])
         child.add_argument("--match-iou", type=float, default=0.3)
+        child.add_argument("--recover-score", type=float, help="Добавлять пропущенные объекты из детекций с этой уверенностью")
         child.add_argument("--box-policy", choices=["preserve", "detector"], default="preserve", help="Оставить рамки Qwen или заменить рамками проверяющего модуля")
         child.add_argument("--min-score", type=float, default=0.4)
         if command == "evaluate":
             child.add_argument("--limit", type=int)
     args = parser.parse_args()
+    if args.recover_score is not None and not 0 <= args.recover_score <= 1:
+        parser.error("recover-score должен лежать от 0 до 1")
     if not 0 < args.match_iou <= 1 or not 0 <= args.min_score <= 1:
         parser.error("Проверь пороги IoU и confidence")
     if args.command == "evaluate" and args.limit is not None and args.limit < 1:
@@ -119,7 +122,7 @@ def main():
         else:
             if system is None:
                 print("Загружаю Qwen и детектор", flush=True)
-                system = VisualGroundingSystem(QwenBackend(args.model, args.device, args.max_new_tokens, args.max_pixels, labels), YoloDetector(args.detector), EasyOCRBackend(args.languages), args.match_iou, args.min_score, args.box_policy)
+                system = VisualGroundingSystem(QwenBackend(args.model, args.device, args.max_new_tokens, args.max_pixels, labels), YoloDetector(args.detector), EasyOCRBackend(args.languages), args.match_iou, args.min_score, args.box_policy, args.recover_score, labels)
             result = system.run_pipeline(image_path)
             result["image_sha256"] = file_hash(image_path)
             if truth is not None:
@@ -128,6 +131,10 @@ def main():
             print(f"Обработано {index + 1}/{len(rows)}: {image_path.name}", flush=True)
         records.append(result)
         save_comparison(image_path, result, args.out / f"{index:05d}.jpg")
+        average_seconds = sum(record.get("seconds", 0) for record in records) / len(records)
+        save_json(args.out / "progress.json", {"processed": len(records), "total": len(rows),
+                  "average_seconds": round(average_seconds, 2),
+                  "estimated_remaining_minutes": round(average_seconds * (len(rows) - len(records)) / 60, 1)})
     save_json(args.out / "outputs.json", records)
     if args.command == "evaluate":
         report = evaluate(records)

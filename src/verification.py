@@ -13,11 +13,13 @@ def cv_stats(image, bbox):
     return {"contrast_std": float(crop.std()), "edge_fraction": float((cv2.Canny(crop, 60, 160) > 0).mean())}
 
 
-def verify(scene, image, detections, ocr, match_iou=0.3, min_score=0.4, box_policy="preserve"):
+def verify(scene, image, detections, ocr, match_iou=0.3, min_score=0.4, box_policy="preserve", recover_score=None, object_labels=None):
     if not 0 < match_iou <= 1 or not 0 <= min_score <= 1:
         raise ValueError("Пороги должны лежать в диапазоне от 0 до 1, IoU строго больше 0")
     if box_policy not in ("preserve", "detector"):
         raise ValueError("box_policy должен быть preserve или detector")
+    if recover_score is not None and not 0 <= recover_score <= 1:
+        raise ValueError("Порог восстановления должен лежать от 0 до 1")
     evidence = detections + ocr
     candidates = []
     for pi, proposal in enumerate(scene.objects):
@@ -50,4 +52,18 @@ def verify(scene, image, detections, ocr, match_iou=0.3, min_score=0.4, box_poli
             entry.update(status="unconfirmed", source=None)
         # Границы и контраст сами по себе не доказывают, что перед нами кот или машина
         audit.append(entry)
+    if recover_score is not None:
+        allowed = None if object_labels is None else {normalize(label) for label in object_labels}
+        for ei, item in sorted(enumerate(detections), key=lambda pair: pair[1].score, reverse=True):
+            region = item.region
+            if ei in used or item.score < recover_score or region.kind != "object":
+                continue
+            if allowed is not None and normalize(region.label) not in allowed:
+                continue
+            if any(normalize(region.label) == normalize(existing.label) and iou(region.bbox, existing.bbox) >= match_iou for existing in kept):
+                continue
+            kept.append(region.model_copy())
+            audit.append({"proposal": None, "status": "added_by_detector", "source": "detector",
+                          "region": region.model_dump(mode="json"), "evidence_score": item.score,
+                          "cv": cv_stats(image, region.bbox)})
     return Scene(objects=kept).check_size(image.size), audit

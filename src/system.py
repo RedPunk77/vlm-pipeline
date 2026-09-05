@@ -9,7 +9,7 @@ from src.verification import verify
 
 
 class VisualGroundingSystem:
-    def __init__(self, vlm, detector, ocr, match_iou=0.3, min_score=0.4, box_policy="preserve"):
+    def __init__(self, vlm, detector, ocr, match_iou=0.3, min_score=0.4, box_policy="preserve", recover_score=None, object_labels=None):
         self.vlm = vlm
         self.detector = detector
         self.ocr = ocr
@@ -18,6 +18,8 @@ class VisualGroundingSystem:
         if box_policy not in ("preserve", "detector"):
             raise ValueError("box_policy должен быть preserve или detector")
         self.box_policy = box_policy
+        self.recover_score = recover_score
+        self.object_labels = object_labels
 
     def run_pipeline(self, image_path):
         started = time.perf_counter()
@@ -35,21 +37,20 @@ class VisualGroundingSystem:
         except ValueError as exc:
             baseline = None
             error = str(exc)
-        detections, texts = [], []
+        detections = self.detector.detect(image)
+        texts = self.ocr.detect(image) if baseline is not None and any(r.kind == "text" for r in baseline.objects) else []
+        for item in detections + texts:
+            Scene(objects=[item.region]).check_size(image.size)
         if baseline is None:
             verified, audit = None, []
         else:
-            detections = self.detector.detect(image)
-            texts = self.ocr.detect(image) if any(r.kind == "text" for r in baseline.objects) else []
-            for item in detections + texts:
-                Scene(objects=[item.region]).check_size(image.size)
-            verified, audit = verify(baseline, image, detections, texts, self.match_iou, self.min_score, self.box_policy)
+            verified, audit = verify(baseline, image, detections, texts, self.match_iou, self.min_score, self.box_policy, self.recover_score, self.object_labels)
         return {
             "image": str(Path(image_path)), "image_size": list(image.size),
             "model": getattr(self.vlm, "model_id", type(self.vlm).__name__),
             "prompt_version": getattr(self.vlm, "prompt_version", None),
             "model_revision": getattr(self.vlm, "revision", None),
-            "config": {"match_iou": self.match_iou, "min_score": self.min_score, "box_policy": self.box_policy},
+            "config": {"match_iou": self.match_iou, "min_score": self.min_score, "box_policy": self.box_policy, "recover_score": self.recover_score, "object_labels": self.object_labels},
             "raw": raw, "parse_error": error,
             "baseline": baseline.model_dump(mode="json") if baseline is not None else None,
             "verified": verified.model_dump(mode="json") if verified is not None else None,
