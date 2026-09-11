@@ -1,0 +1,46 @@
+{
+  "qwen_model": "Qwen/Qwen2.5-VL-3B-Instruct",
+  "qwen_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+  "detector_sha256": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1",
+  "split_sha256": "916dc34223563829050bb932648b52aa5b4fba9fe91852dbafa8a8247bfd8467",
+  "validation_manifest_sha256": "aa672e595b2481184bc1b9c57a5a53762d3871dd146493ef0309621dfca8b71b",
+  "test_manifest_sha256": "625939cf7f7bab103b0d1d71159844b6f20cc4cf7e5f75959594f9e8f55a1ef5",
+  "source_sha256": "352987246e710c719c62aa4de6bf52cd5c794d9aca45050ceee1a0cd51a085de",
+  "device": "mps",
+  "max_pixels": 200704,
+  "max_new_tokens": 1536,
+  "match_iou": 0.3,
+  "min_score": 0.4,
+  "variants": [
+    {
+      "name": "filter_preserve",
+      "box_policy": "preserve",
+      "recover_score": null
+    },
+    {
+      "name": "filter_detector",
+      "box_policy": "detector",
+      "recover_score": null
+    },
+    {
+      "name": "recover_060",
+      "box_policy": "preserve",
+      "recover_score": 0.6
+    },
+    {
+      "name": "recover_080",
+      "box_policy": "preserve",
+      "recover_score": 0.8
+    }
+  ],
+  "selection": "0.4 * structured_accuracy + 0.4 * grounding_iou + 0.2 * recall - 0.2 * hallucination_rate",
+  "tie_break": "Порядок variants, при равенстве выбирается более ранний",
+  "versions": {
+    "torch": "2.6.0",
+    "transformers": "4.52.4",
+    "ultralytics": "8.4.50",
+    "pydantic": "2.10.4",
+    "numpy": "2.2.1"
+  },
+  "scope": "Объекты COCO, OCR не оценивается, уже разобранные изображения исключены"
+}
